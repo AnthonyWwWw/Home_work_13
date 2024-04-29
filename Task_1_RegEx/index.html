@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css"  href="./css/main.css">
+</head>
+<body>
+        <!-- ДЗ 21. Валідація з RegEx
+            
+            Доробити валідацію для надсилання повідомлення з використанням регулярних виразів:
+
+            Поля:
+
+            Name - обовьязкове текстове поле
+            Message - текстове поле не меньше 5 символів
+            Phone number - обовьязкове поле типу phone. З початком на +380
+            Email - email обовьязково повинен мати @ та крапку
+            Після відправки, в консоль відображаємо дані, які ввів користувач.
+
+            Під час помилки показувати її під полем.-->
+            
+    <div class="container">
+        <h1>Contact Form</h1>
+        <form id="contactForm" action="#" method="POST" novalidate>
+            <div class="form-group">
+                <label for="name">Name <span style="color: red;">*</span></label>
+                <input type="text" id="name" name="name" required>
+                <ul class="error" id="listErrorName">
+                    <li>Ім'я має починатися з великої літери</li>
+                    <li>В даному полі можуть міститися тільки літери латинського алфавіту</li>
+                </ul>
+            </div>
+            <div class="form-group">
+                <label for="message">Message <span style="color: red;">*</span></label>
+                <textarea id="message" name="message" rows="4"></textarea>
+                <ul class="error" id="listErrorMessage">
+                    <li>Мінімальна довжина рядка 5 символів</li>
+                </ul>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone number <span style="color: red;">*</span></label>
+                <input type="tel" id="phone" name="phone" required placeholder="+380XXXXXXXXX">
+                <ul class="error" id="listErrorPhone">
+                    <li>Мобільний номер має починатися з коду країни (+380)</li>
+                </ul>
+            </div>
+            <div class="form-group">
+                <label for="email">Email <span style="color: red;">*</span></label>
+                <input type="email" id="email" name="email" required>
+                <ul class="error" id="listErrorEmail">
+                    <li>Формат має бути: google@gmail.com</li>
+                </ul>
+            </div>
+            <button type="submit" id="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.querySelector('#contactForm');
+        const nameInput = document.querySelector('#name');
+        const nameErrorMessage = document.querySelector('#listErrorName');
+        const messageInput = document.querySelector('#message');
+        const messageErrorMessage = document.querySelector('#listErrorMessage');
+        const phoneInput = document.querySelector('#phone');
+        const phoneErrorMessage = document.querySelector('#listErrorPhone');
+        const emailInput = document.querySelector('#email');
+        const emailErrorMessage = document.querySelector('#listErrorEmail');
+
+        // Перевіряє коректність введених даних за допомогою регулярних виразів
+        function checkingCorrectnessData(reqExp, item, errorElement) {
+            if (reqExp.test(item.value)) { // Якщо умова виконується, приховуємо елемент
+                errorElement.style.display = "none";
+                return true;
+            } else { // Якщо умова не виконується, відображаємо елемент
+                errorElement.style.display = "block";
+                return false;
+            }
+        }
+
+        // Відображає введені дані в консолі.
+        function showUserData(name, message, phone, email) {
+            console.log("Name:", name);
+            console.log("Message:", message);
+            console.log("Phone number:", phone);
+            console.log("Email:", email);
+        }
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const areFieldsValid = validateRequiredFields();
+            if (areFieldsValid) {
+                const isNameValid = checkingCorrectnessData(/^[A-Z]/, nameInput, nameErrorMessage.children[0]);
+                const isNameValidTwo = checkingCorrectnessData(/^[A-Za-z]+$/, nameInput, nameErrorMessage.children[1]);
+                const isMessageValid = checkingCorrectnessData(/^\+380\d+$/, phoneInput, phoneErrorMessage.children[0]);
+                const isPhoneValid = checkingCorrectnessData(/.{5,}/, messageInput, messageErrorMessage.children[0]);
+                const isEmailValid = checkingCorrectnessData(/^.+@.+\..+$/, emailInput, emailErrorMessage.children[0]);
+
+                if (isNameValid && isNameValidTwo && isMessageValid && isPhoneValid && isEmailValid) {
+                    showUserData(nameInput.value, messageInput.value, phoneInput.value, emailInput.value);
+                } else {
+                    alert("Форма містить помилки. Будь ласка, перевірте ваші дані.");
+                }   
+            } else {
+                alert("Всі поля є обов'язковими для заповнення.");
+            }
+        });
+
+        // Перевіряє обов'язкові поля для заповнення.
+        function validateRequiredFields() {
+            const fields = [nameInput, messageInput, phoneInput, emailInput];
+            let isValid = true;
+
+            fields.forEach(field => {
+                if (field.value.trim() === '') {
+                    field.style.border = '1px solid red';
+                    isValid = false;
+                } else {
+                    field.style.border = '1px solid #ccc';
+                }
+            });
+
+            return isValid;
+        }
+    </script>
+</body>
+</html>
