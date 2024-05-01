@@ -82,7 +82,7 @@
         function showUserData(name, message, phone, email) {
             console.log("Name:", name);
             console.log("Message:", message);
-            console.log("Phone number:", phone);
+            console.log("Phone number:", phone); 
             console.log("Email:", email);
         }
 
@@ -98,7 +98,6 @@
 
                 if (isNameValid && isNameValidTwo && isMessageValid && isPhoneValid && isEmailValid) {
                     showUserData(nameInput.value, messageInput.value, phoneInput.value, emailInput.value);
-                    // form.submit();
                 } else {
                     alert("Форма містить помилки. Будь ласка, перевірте ваші дані.");
                 }   
